@@ -14,7 +14,7 @@ import Signup from './components/Signup'
 import Dashboard from './components/Dashboard'
 import AllTransactions from './components/AllTransactions'
 import PrivateRoute from './components/PrivateRoute'
-import {Menu} from 'semantic-ui-react'
+import {Menu, Button} from 'semantic-ui-react'
 
 import * as api from './api'
 
@@ -72,15 +72,30 @@ class App extends React.Component {
             if (isAuthenticated && user) {
                 return (
                     <Menu pointing>
-                        <span>{user.firstname} {user.lastname} &ndash; {user.accountNr}</span>
+                        <Menu.Item>
+                            <span>{user.firstname} {user.lastname} &ndash; {user.accountNr}</span>
+                        </Menu.Item>
                         {/* Links inside the App are created using the react-router's Link component */}
-                        <Link to="/">Home</Link>
-                        <Link to="/dashboard">Kontoübersicht</Link>
-                        <Link to="/transactions">Zahlungen</Link>
-                        <a href="/logout" onClick={(event) => {
+                        <Menu.Item>
+                            <Link to="/"><Button>Home</Button></Link>
+                        </Menu.Item>
+                        <Menu.Item>
+                            <Link to="/dashboard"><Button>Kontoübersicht</Button></Link>
+                        </Menu.Item>
+                        <Menu.Item>
+                            <Link to="/transactions"><Button>Zahlungen</Button></Link>
+                        </Menu.Item>
+
+                        <Menu.Item position="right">
+                            <a href="/logout" onClick={(event) => {
                                           event.preventDefault()
                                           this.signout(() => history.push('/'))
-                                        }}>Logout {user.firstname} {user.lastname}</a>
+                                        }}>
+                                <Button>
+                                    Logout {user.firstname} {user.lastname}
+                                </Button>
+                            </a>
+                        </Menu.Item>
                     </Menu>
                 )
             } else {
@@ -99,9 +114,9 @@ class App extends React.Component {
                      The following are protected routes that are only available for logged-in users. We also pass the user and token so
                      these components can do API calls. PrivateRoute is not part of react-router but our own implementation.
                      */}
-                    <PrivateRoute path="/dashboard" isAuthenticated={isAuthenticated} token={token}
+                    <PrivateRoute path="/dashboard" isAuthenticated={isAuthenticated} token={token} user={user}
                                   component={Dashboard}/>
-                    <PrivateRoute path="/transactions" isAuthenticated={isAuthenticated} token={token} user={user}
+                    <PrivateRoute path="/transactions" isAuthenticated={isAuthenticated} token={token}
                                   component={AllTransactions}/>
                 </div>
             </Router>

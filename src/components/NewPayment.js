@@ -1,7 +1,9 @@
 // @flow
 
 import React from 'react'
-import {Card, Button, Form} from 'semantic-ui-react'
+import {Card, Button, Form, Message, Icon} from 'semantic-ui-react'
+import {transfer, getAccountDetails} from '../api'
+import type {TransferResult} from '../api'
 
 /*
  Use the api functions to call the API server. For example, the transactions
@@ -17,42 +19,90 @@ import {Card, Button, Form} from 'semantic-ui-react'
 
 export type Props = {
     token: string,
+    user: User,
+    cbUpdateTransactions: () => void,
 }
 
 class NewPayment extends React.Component {
 
     state: {
-        fromAccount: string,
         toAccount: string,
-        amount: number
-    } = {};
+        amount: number,
+        transaction: TransferResult,
+        actualBalance: number
+    } = {toAccount: '', amount: '', transaction: undefined, actualBalance: ''};
     props: Props
 
+    componentDidMount() {
+        this.updateBalance();
+    }
+
+    updateBalance() {
+        getAccountDetails(this.props.token)
+            .then((result: any) => {
+                this.setState({actualBalance: result.amount});
+            });
+    }
+
     handleNewTransaction = (event: Event) => {
+        transfer(this.state.toAccount, +this.state.amount, this.props.token)
+            .then((result, query) => {
+                this.setState({transaction: result});
+                this.props.cbUpdateTransactions();
+                this.updateBalance();
+            }).catch((err) => {
+            console.log('Error on Transfer: ', err);
+        });
+        event.preventDefault();
+    }
+    handleToAccChange = (event: Event) => {
+        this.setState({toAccount: event.target.value, transaction: undefined});
+    }
+    handleAmountChange = (event: Event) => {
+        var val = event.target.value;
+        if (!isNaN(val) && +val !== Infinity) {
+            this.setState({amount: val, transaction: undefined});
+        }
+    }
+
+    transactionMessage = () => {
+        if (this.state.transaction) {
+            return (
+                <Message attached='bottom'>
+                    <Icon name='info'/><br />
+                    Transaction to {this.state.transaction.target}
+                    succeeded! New balance is {this.state.transaction.total} CHF
+                </Message>);
+        }
+    }
+
+    fromAccount = () => {
+        return this.props.user.accountNr + ' [' + this.state.actualBalance + ' CHF]';
     }
 
     render() {
-
         return (
             <Card>
                 <Card.Content>
                     <Card.Header>New Transaction</Card.Header>
-                    <Form>
+                    <Form onSubmit={this.handleNewTransaction}>
                         <Form.Field>
                             <label>From:</label>
-                            <input value={this.state.fromAccount} type="text"/>
+                            <input value={this.fromAccount()} disabled type="text"/>
                         </Form.Field>
                         <Form.Field>
                             <label>To:</label>
-                            <input placeholder="Target Account Number" className="ui input" value={this.state.toAccount} type="text"/>
+                            <input placeholder="Target Account Number" value={this.state.toAccount}
+                                   onChange={this.handleToAccChange} type="text"/>
                         </Form.Field>
                         <Form.Field>
                             <label>Amount [CHF]:</label>
-                            <input placeholder="Amount in CHF" className="ui input" value={this.state.amount} type="text"/>
+                            <input placeholder="Amount in CHF" value={this.state.amount}
+                                   onChange={this.handleAmountChange} type="text"/>
                         </Form.Field>
-                        <Button primary onClick={this.handleNewTransaction}>Pay</Button>
+                        <Button primary type='submit'>Pay</Button>
                     </Form>
-                    This is new Payment!
+                    {this.transactionMessage()}
                 </Card.Content>
             </Card>
         )
