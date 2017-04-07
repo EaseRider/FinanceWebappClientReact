@@ -1,6 +1,7 @@
 // @flow
 
 import React from 'react'
+import {Card, Button, Form} from 'semantic-ui-react'
 
 /*
  Use the api functions to call the API server. For example, the transactions
@@ -27,17 +28,33 @@ class NewPayment extends React.Component {
     } = {};
     props: Props
 
+    handleNewTransaction = (event: Event) => {
+    }
+
     render() {
 
         return (
-            <div>
-                <h1>New Transaction</h1>
-                <input value={this.state.fromAccount} type="text"/>
-                <input value={this.state.toAccount} type="text"/>
-                <input value={this.state.amount} type="text"/>
-                <button>Pay</button>
-                This is new Payment!
-            </div>
+            <Card>
+                <Card.Content>
+                    <Card.Header>New Transaction</Card.Header>
+                    <Form>
+                        <Form.Field>
+                            <label>From:</label>
+                            <input value={this.state.fromAccount} type="text"/>
+                        </Form.Field>
+                        <Form.Field>
+                            <label>To:</label>
+                            <input placeholder="Target Account Number" className="ui input" value={this.state.toAccount} type="text"/>
+                        </Form.Field>
+                        <Form.Field>
+                            <label>Amount [CHF]:</label>
+                            <input placeholder="Amount in CHF" className="ui input" value={this.state.amount} type="text"/>
+                        </Form.Field>
+                        <Button primary onClick={this.handleNewTransaction}>Pay</Button>
+                    </Form>
+                    This is new Payment!
+                </Card.Content>
+            </Card>
         )
     }
 }

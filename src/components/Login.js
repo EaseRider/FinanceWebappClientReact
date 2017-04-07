@@ -72,17 +72,17 @@ class Login extends React.Component {
         return (
             <Card>
                 <Card.Content>
-                <Card.Header>Bank of Rapperswil</Card.Header>
-                <form className="ui form">
-                    <h2>Login</h2>
-                    <input className="ui input" onChange={this.handleLoginChanged} placeholder='Login'
-                           value={this.state.login}/>
-                    <input className="ui input" onChange={this.handlePasswordChanged} placeholder='Password'
-                           type="password" value={this.state.password}/>
-                    <button className="ui primary button" onClick={this.handleSubmit}>Log-in</button>
-                </form>
-                { error && <p>Es ist ein Fehler aufgetreten!</p> }
-                <Link to="/signup">Noch keinen Account?</Link>
+                    <Card.Header>Bank of Rapperswil</Card.Header>
+                    <form className="ui form">
+                        <h2>Login</h2>
+                        <input className="ui input" onChange={this.handleLoginChanged} placeholder='Login'
+                               value={this.state.login}/>
+                        <input className="ui input" onChange={this.handlePasswordChanged} placeholder='Password'
+                               type="password" value={this.state.password}/>
+                        <button className="ui primary button" onClick={this.handleSubmit}>Log-in</button>
+                    </form>
+                    { error && <p>Es ist ein Fehler aufgetreten!</p> }
+                    <Link to="/signup">Noch keinen Account?</Link>
                 </Card.Content>
             </Card>
         )
