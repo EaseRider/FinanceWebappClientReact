@@ -16,7 +16,10 @@ class AllTransactions extends React.Component {
         transactions: Transaction[],
         filterYear: number,
         filterMonth: number,
-    } = {transactions: [], filterYear: 2017, filterMonth: 1};
+    } = {transactions: [], filterYear: (new Date()).getYear(), filterMonth: (new Date()).getMonth()};
+
+    private years: number[] = [2017, 2016, 2015];
+    private months: string[] = [''];
 
     props: Props;
 
