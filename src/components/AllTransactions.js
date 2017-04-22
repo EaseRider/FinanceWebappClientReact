@@ -19,7 +19,7 @@ class AllTransactions extends React.Component {
     } = {transactions: [], filterYear: (new Date()).getYear(), filterMonth: (new Date()).getMonth()};
 
     private years: number[] = [2017, 2016, 2015];
-    private months: string[] = [''];
+    private months: string[] = ['Jannuary', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
     props: Props;
 
@@ -30,7 +30,7 @@ class AllTransactions extends React.Component {
 
     updateTransactions = () => {
         var start = new Date(Date.UTC(this.state.filterYear, this.state.filterMonth, 1));
-        var end = new Date(Date.UTC(this.state.filterYear, this.state.filterMonth + 1, 0, 24, 0, -1));
+        var end = new Date(Date.UTC(this.state.filterYear, this.state.filterMonth + 1, 0, 23, 59, 59, 999));
         getTransactions(this.props.token, start.toJSON(), end.toJSON(), 0, 0).then(({result, query}) => {
             this.setState({transactions: result});
         }).catch((error) => {
