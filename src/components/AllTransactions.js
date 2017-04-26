@@ -18,8 +18,8 @@ class AllTransactions extends React.Component {
         filterMonth: number,
     } = {transactions: [], filterYear: (new Date()).getYear(), filterMonth: (new Date()).getMonth()};
 
-    private years: number[] = [2017, 2016, 2015];
-    private months: string[] = ['Jannuary', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    years: number[] = [2017, 2016, 2015];
+    months: string[] = ['Jannuary', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
     props: Props;
 
@@ -29,22 +29,22 @@ class AllTransactions extends React.Component {
 
 
     updateTransactions = () => {
-        var start = new Date(Date.UTC(this.state.filterYear, this.state.filterMonth, 1));
-        var end = new Date(Date.UTC(this.state.filterYear, this.state.filterMonth + 1, 0, 23, 59, 59, 999));
+        let start = new Date(Date.UTC(this.state.filterYear, this.state.filterMonth, 1));
+        let end = new Date(Date.UTC(this.state.filterYear, this.state.filterMonth + 1, 0, 23, 59, 59, 999));
         getTransactions(this.props.token, start.toJSON(), end.toJSON(), 0, 0).then(({result, query}) => {
             this.setState({transactions: result});
         }).catch((error) => {
             this.setState({transactions: []});
         });
-    }
+    };
     handleYearChange = (event: Event) => {
         this.setState({filterYear: +event.target.value}, () => this.updateTransactions());
         //this.updateTransactions();
-    }
+    };
     handleMonthChange = (event: Event) => {
         this.setState({filterMonth: +event.target.value}, () => this.updateTransactions());
         //this.updateTransactions();
-    }
+    };
 
     filterform = () => {
         return (
@@ -83,7 +83,7 @@ class AllTransactions extends React.Component {
                     </Grid.Row>
                 </Grid>
             </Form>);
-    }
+    };
 
     render() {
         return (
@@ -105,7 +105,7 @@ class AllTransactions extends React.Component {
                 </Card>
             </Card.Group>
         )
-    }
+    };
 }
 
 export default AllTransactions;
