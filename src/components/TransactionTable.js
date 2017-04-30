@@ -36,7 +36,7 @@ class TransactionTable extends React.Component {
     }
 
     formatMoney = (amount) => {
-        return amount.toFixed(2);
+        return amount ? amount.toFixed(2) : amount;
     }
 
     columsHeader = () => {

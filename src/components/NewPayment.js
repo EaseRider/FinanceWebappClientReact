@@ -75,7 +75,7 @@ class NewPayment extends React.Component {
                     toAccount: '',
                     toAccountError: false,
                     amount: '',
-                    transactionState: 'Transaction to ' + result.target + ' succeeded. New balance is ' + result.total + ' CHF',
+                    transactionState: 'Transaction to ' + result.target + ' succeeded. New balance is ' + parseFloat(result.total).toFixed(2) + ' CHF',
                     transactionError: false
                 });
                 this.props.cbUpdateTransactions();
@@ -106,6 +106,7 @@ class NewPayment extends React.Component {
         }
     };
 
+
     validateAccountExists = (value: any, callback: Function) => {
         if (value) {
             getAccount(value, this.props.token).then(account => {
@@ -131,7 +132,7 @@ class NewPayment extends React.Component {
                     <Form onSubmit={this.handleNewTransaction}>
                         <FormField>
                             <Input fluid label='From' placeholder='From' readOnly
-                                   value={this.state.fromAccount + ' [Amount: ' + this.state.fromAccountAmount + ' CHF]'}/>
+                                   value={this.state.fromAccount + ' [' + parseFloat(this.state.fromAccountAmount).toFixed(2) + ' CHF]'}/>
                         </FormField>
                         <ValidatedFormField fluid label='To' placeholder='To' icon='user' value={this.state.toAccount}
                                             onChange={this.handleToAccChange} validations={this.validateAccountExists}
