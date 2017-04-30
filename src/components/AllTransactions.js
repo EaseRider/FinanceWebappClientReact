@@ -16,7 +16,7 @@ class AllTransactions extends React.Component {
         transactions: Transaction[],
         filterYear: number,
         filterMonth: number,
-    } = {transactions: [], filterYear: (new Date()).getYear(), filterMonth: (new Date()).getMonth()};
+    } = {transactions: [], filterYear: (new Date()).getFullYear(), filterMonth: (new Date()).getMonth()};
 
     years: number[] = [2017, 2016, 2015];
     months: string[] = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -26,7 +26,6 @@ class AllTransactions extends React.Component {
     componentDidMount() {
         this.updateTransactions();
     }
-
 
     updateTransactions = () => {
         let start = new Date(Date.UTC(this.state.filterYear, this.state.filterMonth, 1));
@@ -49,15 +48,16 @@ class AllTransactions extends React.Component {
     filterform = () => {
         return (
             <Form onSubmit={this.handleNewTransaction}>
-                <Grid columns={2}>
+                <Grid stackable columns={2}>
                     <Grid.Row>
                         <Grid.Column width="3">
                             <Form.Field>
                                 <label>Select a year</label>
                                 <select value={this.state.filterYear} onChange={this.handleYearChange}>
-                                    <option value="2015">2015</option>
-                                    <option value="2016">2016</option>
-                                    <option value="2017">2017</option>
+                                    {
+                                        this.years.map((year, index) =>
+                                            (<option value={year} key={year}>{year}</option>))
+                                    }
                                 </select>
                             </Form.Field>
                         </Grid.Column>
@@ -65,18 +65,10 @@ class AllTransactions extends React.Component {
                         <Form.Field>
                             <label>Select a month</label>
                             <select value={this.state.filterMonth} onChange={this.handleMonthChange}>
-                                <option value="0">Jannuary</option>
-                                <option value="1">February</option>
-                                <option value="2">March</option>
-                                <option value="3">April</option>
-                                <option value="4">May</option>
-                                <option value="5">June</option>
-                                <option value="6">July</option>
-                                <option value="7">August</option>
-                                <option value="8">September</option>
-                                <option value="9">October</option>
-                                <option value="10">November</option>
-                                <option value="11">December</option>
+                                {
+                                    this.months.map((month, index) =>
+                                        (<option value={index} key={index}>{month}</option>))
+                                }
                             </select>
                         </Form.Field>
                     </Grid.Column>
@@ -97,7 +89,6 @@ class AllTransactions extends React.Component {
                         <Divider></Divider>
                         <Card.Header>Filter</Card.Header>
                         {this.filterform()}
-                        FormForFilter
                     </Card.Content>
                     <Card.Content>
                         <TransactionTable transactions={this.state.transactions} isAllTransaction={true}/>

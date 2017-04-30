@@ -2,7 +2,7 @@
 import React from 'react'
 import type {Transaction} from '../api'
 import {Table, Button} from 'semantic-ui-react'
-
+import moment from 'moment';
 import {Link} from 'react-router-dom'
 
 export type Props = {
@@ -31,52 +31,44 @@ class TransactionTable extends React.Component {
         }
     }
 
+    formatDate = (dateString) => {
+        return moment(dateString).format('DD.MM.YYYY');
+    }
+
+    formatMoney = (amount) => {
+        return amount.toFixed(2);
+    }
+
     columsHeader = () => {
-        if (this.props.isAllTransaction) {
-            return (
-                <Table.Row>
+        return (
+            <Table.Row>
+                {this.props.isAllTransaction && (
                     <Table.HeaderCell>Date</Table.HeaderCell>
-                    <Table.HeaderCell>Source</Table.HeaderCell>
-                    <Table.HeaderCell>Target</Table.HeaderCell>
-                    <Table.HeaderCell>Amount [CHF]</Table.HeaderCell>
-                    <Table.HeaderCell>Balance [CHF]</Table.HeaderCell>
-                </Table.Row>);
-        } else {
-            return (
-                <Table.Row>
-                    <Table.HeaderCell>Source</Table.HeaderCell>
-                    <Table.HeaderCell>Target</Table.HeaderCell>
-                    <Table.HeaderCell>Amount [CHF]</Table.HeaderCell>
-                    <Table.HeaderCell>Balance [CHF]</Table.HeaderCell>
-                </Table.Row>);
-        }
+                )}
+                <Table.HeaderCell>Source</Table.HeaderCell>
+                <Table.HeaderCell>Target</Table.HeaderCell>
+                <Table.HeaderCell>Amount [CHF]</Table.HeaderCell>
+                <Table.HeaderCell>Balance [CHF]</Table.HeaderCell>
+            </Table.Row>);
     }
 
     rows = () => {
-        if (this.props.isAllTransaction)
         return this.props.transactions.map((tr, index) =>
-                <Table.Row key={index}>
-                    <Table.Cell>{tr.date}</Table.Cell>
-                    <Table.Cell>{tr.from}</Table.Cell>
-                    <Table.Cell>{tr.target}</Table.Cell>
-                    <Table.Cell>{tr.amount}</Table.Cell>
-                    <Table.Cell>{tr.total}</Table.Cell>
-                </Table.Row>
-            );
-        else
-            return this.props.transactions.map((tr, index) =>
-                    <Table.Row key={index}>
-                        <Table.Cell>{tr.from}</Table.Cell>
-                        <Table.Cell>{tr.target}</Table.Cell>
-                        <Table.Cell>{tr.amount}</Table.Cell>
-                        <Table.Cell>{tr.total}</Table.Cell>
-                    </Table.Row>
-                );
+            <Table.Row key={index}>
+                {this.props.isAllTransaction && (
+                    <Table.Cell>{this.formatDate(tr.date)}</Table.Cell>
+                )}
+                <Table.Cell>{tr.from}</Table.Cell>
+                <Table.Cell>{tr.target}</Table.Cell>
+                <Table.Cell>{this.formatMoney(tr.amount)}</Table.Cell>
+                <Table.Cell>{this.formatMoney(tr.total)}</Table.Cell>
+            </Table.Row>
+        );
     }
 
     render() {
         return (
-            <Table celled>
+            <Table celled unstackable striped>
                 <Table.Header>
                     {this.columsHeader()}
                 </Table.Header>
