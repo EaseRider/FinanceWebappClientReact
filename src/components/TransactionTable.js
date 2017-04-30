@@ -2,7 +2,7 @@
 import React from 'react'
 import type {Transaction} from '../api'
 import {Table, Button} from 'semantic-ui-react'
-
+import moment from 'moment';
 import {Link} from 'react-router-dom'
 
 export type Props = {
@@ -31,6 +31,14 @@ class TransactionTable extends React.Component {
         }
     }
 
+    formatDate = (dateString) => {
+        return moment(dateString).format('DD.MM.YYYY');
+    }
+
+    formatMoney = (amount) => {
+        return amount.toFixed(2);
+    }
+
     columsHeader = () => {
         if (this.props.isAllTransaction) {
             return (
@@ -53,25 +61,26 @@ class TransactionTable extends React.Component {
     }
 
     rows = () => {
+        console.log('Rows', this.props);
         if (this.props.isAllTransaction)
-        return this.props.transactions.map((tr, index) =>
+            return this.props.transactions.map((tr, index) =>
                 <Table.Row key={index}>
-                    <Table.Cell>{tr.date}</Table.Cell>
+                    <Table.Cell>{this.formatDate(tr.date)}</Table.Cell>
                     <Table.Cell>{tr.from}</Table.Cell>
                     <Table.Cell>{tr.target}</Table.Cell>
-                    <Table.Cell>{tr.amount}</Table.Cell>
-                    <Table.Cell>{tr.total}</Table.Cell>
+                    <Table.Cell>{this.formatMoney(tr.amount)}</Table.Cell>
+                    <Table.Cell>{this.formatMoney(tr.total)}</Table.Cell>
                 </Table.Row>
             );
         else
             return this.props.transactions.map((tr, index) =>
-                    <Table.Row key={index}>
-                        <Table.Cell>{tr.from}</Table.Cell>
-                        <Table.Cell>{tr.target}</Table.Cell>
-                        <Table.Cell>{tr.amount}</Table.Cell>
-                        <Table.Cell>{tr.total}</Table.Cell>
-                    </Table.Row>
-                );
+                <Table.Row key={index}>
+                    <Table.Cell>{tr.from}</Table.Cell>
+                    <Table.Cell>{tr.target}</Table.Cell>
+                    <Table.Cell>{this.formatMoney(tr.amount)}</Table.Cell>
+                    <Table.Cell>{this.formatMoney(tr.total)}</Table.Cell>
+                </Table.Row>
+            );
     }
 
     render() {

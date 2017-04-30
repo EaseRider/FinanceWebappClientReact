@@ -77,7 +77,7 @@ class NewPayment extends React.Component {
     }
 
     fromAccount = () => {
-        return this.props.user.accountNr + ' [' + this.state.actualBalance + ' CHF]';
+        return this.props.user.accountNr + ' [' + this.state.actualBalance.toFixed(2) + ' CHF]';
     }
 
     render() {
