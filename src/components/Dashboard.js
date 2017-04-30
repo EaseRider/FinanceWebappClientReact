@@ -3,7 +3,7 @@
 import React from 'react'
 import NewPayment from './NewPayment'
 import TransactionTable from './TransactionTable'
-import {Card} from 'semantic-ui-react'
+import {Grid, Header, Segment} from 'semantic-ui-react'
 import type {User, Transaction} from '../api'
 
 import {getTransactions} from '../api'
@@ -43,16 +43,22 @@ class Dashboard extends React.Component {
 
     render() {
         return (
-            <Card.Group itemsPerRow="2">
-                <NewPayment user={this.props.user} token={this.props.token}
-                            cbUpdateTransactions={this.updateTransactions}/>
-                <Card fluid>
-                    <Card.Content>
-                        <Card.Header>Last Transactions</Card.Header>
-                        <TransactionTable transactions={this.state.transactions} isAllTransaction={false}/>
-                    </Card.Content>
-                </Card>
-            </Card.Group>
+            <Grid stackable container columns={2}>
+                <Grid.Row>
+                    <Grid.Column>
+                        <Segment raised>
+                            <NewPayment user={this.props.user} token={this.props.token}
+                                        cbUpdateTransactions={this.updateTransactions}/>
+                        </Segment>
+                    </Grid.Column>
+                    <Grid.Column>
+                        <Segment raised>
+                            <Header size="medium">Last Transactions</Header>
+                            <TransactionTable transactions={this.state.transactions} isAllTransaction={false}/>
+                        </Segment>
+                    </Grid.Column>
+                </Grid.Row>
+            </Grid >
         )
     }
 }

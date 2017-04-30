@@ -71,19 +71,19 @@ class App extends React.Component {
         const MenuBar = withRouter(({history, location: {pathname}}) => {
             if (isAuthenticated && user) {
                 return (
-                    <Menu pointing>
+                    <Menu pointing secondary stackable>
                         <Menu.Item>
                             <span>{user.firstname} {user.lastname} &ndash; {user.accountNr}</span>
                         </Menu.Item>
                         {/* Links inside the App are created using the react-router's Link component */}
                         <Menu.Item>
-                            <Link to="/"><Button>Home</Button></Link>
+                            <Link to="/"><Button secondary={location.pathname === "/"}>Home</Button></Link>
                         </Menu.Item>
                         <Menu.Item>
-                            <Link to="/dashboard"><Button>Kontoübersicht</Button></Link>
+                            <Link to="/dashboard"><Button secondary={location.pathname === "/dashboard"}>Kontoübersicht</Button></Link>
                         </Menu.Item>
                         <Menu.Item>
-                            <Link to="/transactions"><Button>Zahlungen</Button></Link>
+                            <Link to="/transactions"><Button secondary={location.pathname === "/transactions"}>Zahlungen</Button></Link>
                         </Menu.Item>
 
                         <Menu.Item position="right">

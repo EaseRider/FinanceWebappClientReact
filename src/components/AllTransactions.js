@@ -48,7 +48,7 @@ class AllTransactions extends React.Component {
     filterform = () => {
         return (
             <Form onSubmit={this.handleNewTransaction}>
-                <Grid columns={2}>
+                <Grid stackable columns={2}>
                     <Grid.Row>
                         <Grid.Column width="3">
                             <Form.Field>

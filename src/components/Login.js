@@ -2,7 +2,7 @@
 
 import React from 'react'
 import {Redirect, Link} from 'react-router-dom'
-import {Card} from 'semantic-ui-react'
+import {Form, Button, Grid, Segment, Header} from 'semantic-ui-react'
 
 export type Props = {
     /* Callback to submit an authentication request to the server */
@@ -70,21 +70,29 @@ class Login extends React.Component {
         }
 
         return (
-            <Card>
-                <Card.Content>
-                    <Card.Header>Bank of Rapperswil</Card.Header>
-                    <form className="ui form">
-                        <h2>Login</h2>
-                        <input className="ui input" onChange={this.handleLoginChanged} placeholder='Login'
-                               value={this.state.login}/>
-                        <input className="ui input" onChange={this.handlePasswordChanged} placeholder='Password'
-                               type="password" value={this.state.password}/>
-                        <button className="ui primary button" onClick={this.handleSubmit}>Log-in</button>
-                    </form>
-                    { error && <p>Es ist ein Fehler aufgetreten!</p> }
-                    <Link to="/signup">Noch keinen Account?</Link>
-                </Card.Content>
-            </Card>
+            <Grid container>
+                <Grid.Column>
+                    <Segment raised>
+                        <Header size="large">Bank of Rapperswil</Header>
+                        <Form onSubmit={this.handleSubmit}>
+                            <Header size="medium">Login</Header>
+                            <Form.Field>
+                                <input className="ui input" onChange={this.handleLoginChanged} placeholder='Login'
+                                       value={this.state.login}/>
+                            </Form.Field>
+                            <Form.Field>
+                                <input className="ui input" onChange={this.handlePasswordChanged}
+                                       placeholder='Password'
+                                       type="password" value={this.state.password}/>
+                            </Form.Field>
+                            <Button primary type='submit'>Log-in</Button>
+                        </Form>
+                        { error && <p>Es ist ein Fehler aufgetreten!</p> }
+                        <Link to="/signup">Noch keinen Account?
+                            <Button size="small" compact>Signup here</Button></Link>
+                    </Segment>
+                </Grid.Column>
+            </Grid>
         )
     }
 }

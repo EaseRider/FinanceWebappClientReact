@@ -40,51 +40,35 @@ class TransactionTable extends React.Component {
     }
 
     columsHeader = () => {
-        if (this.props.isAllTransaction) {
-            return (
-                <Table.Row>
+        return (
+            <Table.Row>
+                {this.props.isAllTransaction && (
                     <Table.HeaderCell>Date</Table.HeaderCell>
-                    <Table.HeaderCell>Source</Table.HeaderCell>
-                    <Table.HeaderCell>Target</Table.HeaderCell>
-                    <Table.HeaderCell>Amount [CHF]</Table.HeaderCell>
-                    <Table.HeaderCell>Balance [CHF]</Table.HeaderCell>
-                </Table.Row>);
-        } else {
-            return (
-                <Table.Row>
-                    <Table.HeaderCell>Source</Table.HeaderCell>
-                    <Table.HeaderCell>Target</Table.HeaderCell>
-                    <Table.HeaderCell>Amount [CHF]</Table.HeaderCell>
-                    <Table.HeaderCell>Balance [CHF]</Table.HeaderCell>
-                </Table.Row>);
-        }
+                )}
+                <Table.HeaderCell>Source</Table.HeaderCell>
+                <Table.HeaderCell>Target</Table.HeaderCell>
+                <Table.HeaderCell>Amount [CHF]</Table.HeaderCell>
+                <Table.HeaderCell>Balance [CHF]</Table.HeaderCell>
+            </Table.Row>);
     }
 
     rows = () => {
-        if (this.props.isAllTransaction)
-            return this.props.transactions.map((tr, index) =>
-                <Table.Row key={index}>
+        return this.props.transactions.map((tr, index) =>
+            <Table.Row key={index}>
+                {this.props.isAllTransaction && (
                     <Table.Cell>{this.formatDate(tr.date)}</Table.Cell>
-                    <Table.Cell>{tr.from}</Table.Cell>
-                    <Table.Cell>{tr.target}</Table.Cell>
-                    <Table.Cell>{this.formatMoney(tr.amount)}</Table.Cell>
-                    <Table.Cell>{this.formatMoney(tr.total)}</Table.Cell>
-                </Table.Row>
-            );
-        else
-            return this.props.transactions.map((tr, index) =>
-                <Table.Row key={index}>
-                    <Table.Cell>{tr.from}</Table.Cell>
-                    <Table.Cell>{tr.target}</Table.Cell>
-                    <Table.Cell>{this.formatMoney(tr.amount)}</Table.Cell>
-                    <Table.Cell>{this.formatMoney(tr.total)}</Table.Cell>
-                </Table.Row>
-            );
+                )}
+                <Table.Cell>{tr.from}</Table.Cell>
+                <Table.Cell>{tr.target}</Table.Cell>
+                <Table.Cell>{this.formatMoney(tr.amount)}</Table.Cell>
+                <Table.Cell>{this.formatMoney(tr.total)}</Table.Cell>
+            </Table.Row>
+        );
     }
 
     render() {
         return (
-            <Table celled>
+            <Table celled unstackable striped>
                 <Table.Header>
                     {this.columsHeader()}
                 </Table.Header>
