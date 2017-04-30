@@ -28,7 +28,6 @@ class AllTransactions extends React.Component {
     }
 
     updateTransactions = () => {
-        console.log('UpdateTransactions', this.state.filterYear, this.state.filterMonth);
         let start = new Date(Date.UTC(this.state.filterYear, this.state.filterMonth, 1));
         let end = new Date(Date.UTC(this.state.filterYear, this.state.filterMonth + 1, 0, 23, 59, 59, 999));
         getTransactions(this.props.token, start.toJSON(), end.toJSON(), 0, 0).then(({result, query}) => {

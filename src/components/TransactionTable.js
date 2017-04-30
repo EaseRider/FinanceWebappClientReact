@@ -61,7 +61,6 @@ class TransactionTable extends React.Component {
     }
 
     rows = () => {
-        console.log('Rows', this.props);
         if (this.props.isAllTransaction)
             return this.props.transactions.map((tr, index) =>
                 <Table.Row key={index}>
