@@ -19,7 +19,7 @@ class AllTransactions extends React.Component {
     } = {transactions: [], filterYear: (new Date()).getYear(), filterMonth: (new Date()).getMonth()};
 
     years: number[] = [2017, 2016, 2015];
-    months: string[] = ['Jannuary', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    months: string[] = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
     props: Props;
 
