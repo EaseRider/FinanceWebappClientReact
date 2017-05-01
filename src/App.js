@@ -91,7 +91,7 @@ class App extends React.Component {
                                           event.preventDefault()
                                           this.signout(() => history.push('/'))
                                         }}>
-                                <Button>
+                                <Button color="teal">
                                     Logout {user.firstname} {user.lastname}
                                 </Button>
                             </a>

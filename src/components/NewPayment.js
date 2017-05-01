@@ -56,7 +56,7 @@ class NewPayment extends React.Component {
         this.updateBalance();
     }
 
-    updateBalance = ()=> {
+    updateBalance = () => {
         getAccountDetails(this.props.token)
             .then(account => {
                 this.setState({fromAccount: account.accountNr, fromAccountAmount: account.amount});
@@ -70,7 +70,7 @@ class NewPayment extends React.Component {
 
         this.errorFixed(() => {
             transfer(toAccount, amount, this.props.token)
-                .then(result=> {
+                .then(result => {
                     this.setState({
                         transaction: result,
                         toAccount: '',
@@ -88,10 +88,18 @@ class NewPayment extends React.Component {
     };
 
     handleToAccChange = (event: Event) => {
-        this.setState({toAccount: event.target.value, transaction: undefined});
+        if (this.state.transactionState) {
+            this.setState({transactionState: '', transactionError: false});
+        }
+        if(event.target.value.toString().length <= 7) {
+            this.setState({toAccount: event.target.value, transaction: undefined});
+        }
     };
 
     handleAmountChange = (event: Event) => {
+        if (this.state.transactionState) {
+            this.setState({transactionState: '', transactionError: false});
+        }
         var val = event.target.value;
         if (!isNaN(val) && +val !== Infinity) {
             this.setState({amount: val, transaction: undefined});
@@ -102,7 +110,8 @@ class NewPayment extends React.Component {
         if (this.state.transactionState) {
             return (
                 <Message attached='bottom'>
-                    <Label basic color={this.state.transactionError ? 'red': 'green'}>{this.state.transactionState}</Label>
+                    <Label basic
+                           color={this.state.transactionError ? 'red': 'green'}>{this.state.transactionState}</Label>
                 </Message>);
         }
     };
@@ -145,26 +154,28 @@ class NewPayment extends React.Component {
             <Grid container>
                 <Grid.Column>
                     <Segment raised>
-                    <Header>New Transaction</Header>
-                    <Form onSubmit={this.handleNewTransaction}>
-                        <FormField>
-                            <Input fluid label='From' placeholder='From' readOnly
-                                   value={this.state.fromAccount + ' [' + parseFloat(this.state.fromAccountAmount).toFixed(2) + ' CHF]'}/>
-                        </FormField>
-                        <ValidatedFormField fluid label='To' placeholder='To' icon='user' value={this.state.toAccount}
-                                            onChange={this.handleToAccChange} validations={this.validateAccountExists}
-                                            token={this.props.token} ref='toAccount'/>
-                        <ValidatedFormField labelPosition={'right'} type={'currency'} fluid placeholder='0.00'
-                                            value={this.state.amount} onChange={this.handleAmountChange}
-                                            validations={this.transactionValidations} token={this.props.token}
-                                            ref='transactionAmount'>
-                            <Label>Amount</Label>
-                            <input />
-                            <Label basic>CHF</Label>
-                        </ValidatedFormField>
-                        <Button primary content={'Pay'} disabled={!(this.state.amount && this.state.toAccount)}/>
-                    </Form>
-                    {this.transactionMessage()}
+                        <Header>New Transaction</Header>
+                        <Form onSubmit={this.handleNewTransaction}>
+                            <FormField>
+                                <Input fluid label='From' placeholder='From' readOnly
+                                       value={this.state.fromAccount + ' [' + parseFloat(this.state.fromAccountAmount).toFixed(2) + ' CHF]'}/>
+                            </FormField>
+                            <ValidatedFormField fluid label='To' placeholder='To' icon='user'
+                                                value={this.state.toAccount}
+                                                onChange={this.handleToAccChange}
+                                                validations={this.validateAccountExists}
+                                                token={this.props.token} ref='toAccount'/>
+                            <ValidatedFormField labelPosition={'right'} type={'currency'} fluid placeholder='0.00'
+                                                value={this.state.amount} onChange={this.handleAmountChange}
+                                                validations={this.transactionValidations} token={this.props.token}
+                                                ref='transactionAmount' maxLength="7">
+                                <Label>Amount</Label>
+                                <input />
+                                <Label basic>CHF</Label>
+                            </ValidatedFormField>
+                            <Button primary content={'Pay'} disabled={!(this.state.amount && this.state.toAccount)}/>
+                        </Form>
+                        {this.transactionMessage()}
                     </Segment>
                 </Grid.Column>
             </Grid>
