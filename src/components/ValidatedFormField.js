@@ -34,14 +34,6 @@ class ValidatedFormField extends React.Component {
         return true;
     };
 
-    validateGreaterOrEqual = (value: number, other: number) => {
-        if(value < other){
-            this.setState({message: 'should be greater or equal to '+ other});
-            return false;
-        }
-        return true;
-    };
-
     validateValue = (value: any) => {
         if(value === ""){
             this.setState({message: 'should not be empty'});
@@ -57,6 +49,7 @@ class ValidatedFormField extends React.Component {
     executeValidation = (value: any) => {
         var isWrong = false;
         this.clearMessage();
+        this.setState({hasError: true});
 
         const {validations} = this.props;
         if(validations){
@@ -78,16 +71,11 @@ class ValidatedFormField extends React.Component {
                         isWrong = true;
                     }
                 }
-
-                if(key === 'greaterOrEqual' && validations[key] !== undefined){
-                    if(!this.validateGreaterOrEqual(value, validations[key])){
-                        isWrong = true;
-                    }
-                }
             }, this);
         }
 
         this.setState({validated: true, isWrong: isWrong});
+        return isWrong;
     };
 
     validationCallback = (message: string, color: string, isWrong: boolean, validated: boolean) => {
@@ -100,14 +88,6 @@ class ValidatedFormField extends React.Component {
         } else {
             this.executeValidation(value);
         }
-    };
-
-    hasError = () => {
-        if(!this.state.validated){
-            this.validate(this.state.value);
-        }
-
-        return this.state.isWrong;
     };
 
     handleOnChange = (event: Event) => {
@@ -124,7 +104,7 @@ class ValidatedFormField extends React.Component {
     };
 
     render() {
-        const {onChange, validations, fluid, token, ...props} = this.props;
+        const {onChange, validations, fluid, text, token, ...props} = this.props;
         return (
             <FormField>
                 <Input {...props} onChange={this.handleOnChange}
@@ -135,6 +115,10 @@ class ValidatedFormField extends React.Component {
                             :
                             <Label basic pointing content={this.state.message}/>
                     )
+                }
+                {
+                    !this.state.validated &&
+                    text
                 }
             </FormField>
         )

@@ -1,7 +1,7 @@
 // @flow
 
 import React from 'react'
-import {Card, Button, Form, FormField, Label, Input, Message, Icon} from 'semantic-ui-react'
+import {Grid, Segment, Header, Button, Form, FormField, Label, Input, Message, Icon} from 'semantic-ui-react'
 import {transfer, getAccountDetails, getAccount} from '../api'
 import type {TransferResult} from '../api'
 import ValidatedFormField from './ValidatedFormField'
@@ -68,20 +68,22 @@ class NewPayment extends React.Component {
 
         const {toAccount, amount} = this.state;
 
-        transfer(toAccount, amount, this.props.token)
-            .then(result=> {
-                this.setState({
-                    transaction: result,
-                    toAccount: '',
-                    toAccountError: false,
-                    amount: '',
-                    transactionState: 'Transaction to ' + result.target + ' succeeded. New balance is ' + parseFloat(result.total).toFixed(2) + ' CHF',
-                    transactionError: false
-                });
-                this.props.cbUpdateTransactions();
-                this.updateBalance();
-            }).catch((err) => {
-            this.setState({transactionState: 'Transaction failed', transactionError: true});
+        this.errorFixed(() => {
+            transfer(toAccount, amount, this.props.token)
+                .then(result=> {
+                    this.setState({
+                        transaction: result,
+                        toAccount: '',
+                        toAccountError: false,
+                        amount: '',
+                        transactionState: 'Transaction to ' + result.target + ' succeeded. New balance is ' + parseFloat(result.total).toFixed(2) + ' CHF',
+                        transactionError: false
+                    });
+                    this.props.cbUpdateTransactions();
+                    this.updateBalance();
+                }).catch((err) => {
+                this.setState({transactionState: 'Transaction failed', transactionError: true});
+            });
         });
     };
 
@@ -100,7 +102,6 @@ class NewPayment extends React.Component {
         if (this.state.transactionState) {
             return (
                 <Message attached='bottom'>
-                    <Icon name='info'/><br />
                     <Label basic color={this.state.transactionError ? 'red': 'green'}>{this.state.transactionState}</Label>
                 </Message>);
         }
@@ -119,16 +120,32 @@ class NewPayment extends React.Component {
         }
     };
 
-    transferAmountValidations = {
+    errorFixed = (callback: any) => {
+        let hasErrors = false;
+        [
+            this.refs.toAccount,
+            this.refs.transactionAmount
+        ].forEach(function (field) {
+            if (field.executeValidation(field.props.value)) {
+                hasErrors = true;
+            }
+        });
+        if (hasErrors !== true) {
+            callback();
+        }
+    };
+
+    transactionValidations = {
         empty: true,
         greaterOrEqualTo: 0.05
     };
 
     render() {
         return (
-            <Card>
-                <Card.Content>
-                    <Card.Header>New Transaction</Card.Header>
+            <Grid container>
+                <Grid.Column>
+                    <Segment raised>
+                    <Header>New Transaction</Header>
                     <Form onSubmit={this.handleNewTransaction}>
                         <FormField>
                             <Input fluid label='From' placeholder='From' readOnly
@@ -139,17 +156,18 @@ class NewPayment extends React.Component {
                                             token={this.props.token} ref='toAccount'/>
                         <ValidatedFormField labelPosition={'right'} type={'currency'} fluid placeholder='0.00'
                                             value={this.state.amount} onChange={this.handleAmountChange}
-                                            validations={this.transferAmountValidations} token={this.props.token}
-                                            ref='transferAmount'>
+                                            validations={this.transactionValidations} token={this.props.token}
+                                            ref='transactionAmount'>
                             <Label>Amount</Label>
                             <input />
                             <Label basic>CHF</Label>
                         </ValidatedFormField>
-                        <Button primary content={'Pay'}/>
+                        <Button primary content={'Pay'} disabled={!(this.state.amount && this.state.toAccount)}/>
                     </Form>
                     {this.transactionMessage()}
-                </Card.Content>
-            </Card>
+                    </Segment>
+                </Grid.Column>
+            </Grid>
         )
     }
 }
