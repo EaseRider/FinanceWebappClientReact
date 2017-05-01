@@ -1,7 +1,7 @@
 // @flow
 
 import React from 'react'
-import {Grid, Segment, Header, Button, Form, FormField, Label, Input, Message, Icon} from 'semantic-ui-react'
+import {Grid, Segment, Header, Button, Form, FormField, Label, Input, Message} from 'semantic-ui-react'
 import {transfer, getAccountDetails, getAccount} from '../api'
 import type {TransferResult} from '../api'
 import ValidatedFormField from './ValidatedFormField'

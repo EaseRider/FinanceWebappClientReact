@@ -104,7 +104,7 @@ class ValidatedFormField extends React.Component {
     };
 
     render() {
-        const {onChange, validations, fluid, text, token, ...props} = this.props;
+        const {onChange, validations, text, token, ...props} = this.props;
         return (
             <FormField>
                 <Input {...props} onChange={this.handleOnChange}
