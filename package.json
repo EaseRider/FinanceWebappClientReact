@@ -3,8 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "devDependencies": {
-    "react-scripts": "0.9.5",
-    "semantic-ui": "^2.2.10"
+    "react-scripts": "0.9.5"
   },
   "dependencies": {
     "moment": "^2.18.1",
