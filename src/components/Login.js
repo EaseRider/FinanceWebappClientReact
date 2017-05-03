@@ -118,7 +118,7 @@ class Login extends React.Component {
                         {error && <Message attached='bottom' error>Es ist ein Fehler aufgetreten!</Message> }
                     </Segment>
                     <Message attached='bottom' info>
-                        Not registred yet?&nbsp;<Link to="/signup">Signup here</Link>&nbsp;instead.
+                        Not registered yet?&nbsp;<Link to="/signup">Signup here</Link>&nbsp;instead.
                     </Message>
                 </Grid.Column>
             </Grid>
